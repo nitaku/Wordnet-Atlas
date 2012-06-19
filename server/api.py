@@ -11,7 +11,12 @@ def xjson_loads(s):
 
 mongo = pymongo.Connection('opendata')
 
-@get('/hello')
-def hello():
-    return 'Hello!'
+@get('/senses/<lang>/<lemma>[<sensenum:int>]')
+def get_sense(lang, lemma, sensenum):
+    try:
+        sense = mongo.wordnet.senses.find({'lang': lang, 'word.lemma': lemma})[sensenum-1]
+    except IndexError:
+        abort(404, 'No such word sense.')
+        
+    return xjson_dumps(sense)
     
