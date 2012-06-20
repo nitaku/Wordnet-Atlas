@@ -18,5 +18,13 @@ def get_sense(lang, lemma, sensenum):
     except IndexError:
         abort(404, 'No such word sense.')
         
+    # expand the retrieved sense with related info
+    sense['sensenum'] = sensenum
+    
+    for semlink in sense['synset']['semlinks']:
+        semlink['target']['senses'] = []
+        for linked_sense in mongo.wordnet.senses.find({'resource': semlink['target']['resource'], 'synset.id': semlink['target']['id']}):
+            semlink['target']['senses'].append(linked_sense)
+    
     return xjson_dumps(sense)
     

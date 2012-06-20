@@ -3,6 +3,9 @@
     font-size: 12pt;
 }
 
+.wn_entry .title {
+    color: black !important;
+}
 .wn_entry .lemma {
     font-weight: bold;
 }
